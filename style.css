@@ -1,0 +1,94 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: #000;
+  font-family: 'Segoe UI', sans-serif;
+}
+
+/* 선택 화면 */
+#select-screen {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  gap: 48px;
+}
+
+#select-screen h1 {
+  color: #fff;
+  font-size: 2rem;
+  font-weight: 300;
+}
+
+.button-group {
+  display: flex;
+  gap: 32px;
+}
+
+.button-group button {
+  width: 200px;
+  height: 260px;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.05);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+#btn-vertical {
+  width: 160px;
+  height: 260px;
+}
+
+#btn-horizontal {
+  width: 280px;
+  height: 180px;
+}
+
+.button-group button:hover {
+  background: rgba(255, 255, 255, 0.15);
+  border-color: rgba(255, 255, 255, 0.6);
+  transform: scale(1.05);
+}
+
+/* 슬라이더 화면 */
+#slider-screen {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+}
+
+#slider-container {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  position: relative;
+}
+
+#slider-track {
+  display: flex;
+  height: 100%;
+  transition: transform 1s ease-in-out;
+}
+
+#slider-track img {
+  width: 100vw;
+  height: 100vh;
+  object-fit: contain;
+  flex-shrink: 0;
+  background: #000;
+}
+
+.hidden {
+  display: none !important;
+}

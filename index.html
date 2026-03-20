@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Neumafit Signage Slider</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- 선택 화면 -->
+  <div id="select-screen">
+    <h1>디스플레이 모드 선택</h1>
+    <div class="button-group">
+      <button id="btn-vertical" onclick="startSlider('vertical')">세로형</button>
+      <button id="btn-horizontal" onclick="startSlider('horizontal')">가로형</button>
+    </div>
+  </div>
+
+  <!-- 슬라이더 화면 -->
+  <div id="slider-screen" class="hidden">
+    <div id="slider-container">
+      <div id="slider-track"></div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
