@@ -10,16 +10,19 @@
 
 ## 프로젝트 구조
 ```
-index.html          # 메인 페이지 (선택 화면 + 슬라이더)
-style.css           # 스타일시트
-script.js           # 슬라이더 로직
-images/
-  vertical/         # 세로형 이미지 (PNG)
-  horizontal/       # 가로형 이미지 (PNG)
+src/                    # 배포 대상 소스 (S3에 이 폴더가 통째로 업로드됨)
+  index.html            # 메인 페이지 (선택 화면 + 슬라이더)
+  style.css             # 스타일시트
+  script.js             # 슬라이더 로직
+  images/
+    vertical/           # 세로형 이미지 (PNG)
+    horizontal/         # 가로형 이미지 (PNG)
+infrastructure/         # Terraform (S3 + CloudFront)
+.github/workflows/      # GitHub Actions 배포
 ```
 
 ## 실행 방법
-- `index.html`을 브라우저에서 열기
+- `src/index.html`을 브라우저에서 열기
 - 또는 Live Server 등으로 로컬 서버 실행
 
 ## 컨벤션

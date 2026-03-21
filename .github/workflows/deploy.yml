@@ -1,0 +1,73 @@
+name: Deploy to S3
+
+on:
+  push:
+    tags: ["*/web"]
+  workflow_dispatch:
+    inputs:
+      environment:
+        description: "배포 환경"
+        required: true
+        type: choice
+        options: [dev, stg, prd]
+        default: dev
+
+permissions:
+  contents: read
+
+env:
+  AWS_REGION: ap-northeast-2
+  DEPLOY_SECRET_PREFIX: /neumafit/signage-slider
+
+concurrency:
+  group: deploy-s3-main
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Set environment
+        id: env
+        run: |
+          if [[ "${{ github.event_name }}" == "push" ]]; then
+            echo "name=$(echo '${{ github.ref_name }}' | cut -d'/' -f1)" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=${{ inputs.environment }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (Access Key)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
+
+      - name: Read deploy config from Secrets Manager
+        id: config
+        run: |
+          DEPLOY_SECRET_ID="${{ env.DEPLOY_SECRET_PREFIX }}/${{ steps.env.outputs.name }}"
+          echo "Reading secret: $DEPLOY_SECRET_ID"
+
+          CONFIG=$(aws secretsmanager get-secret-value \
+            --secret-id "$DEPLOY_SECRET_ID" \
+            --query SecretString --output text)
+
+          echo "s3_bucket=$(echo "$CONFIG" | jq -r '.S3_BUCKET')" >> "$GITHUB_OUTPUT"
+          echo "cloudfront_distribution_id=$(echo "$CONFIG" | jq -r '.CLOUDFRONT_DISTRIBUTION_ID')" >> "$GITHUB_OUTPUT"
+
+      - name: Upload to S3 (sync)
+        run: |
+          aws s3 sync src/ "s3://${{ steps.config.outputs.s3_bucket }}/" \
+            --delete \
+            --only-show-errors
+
+      - name: Invalidate CloudFront cache
+        run: |
+          aws cloudfront create-invalidation \
+            --distribution-id ${{ steps.config.outputs.cloudfront_distribution_id }} \
+            --paths "/*"

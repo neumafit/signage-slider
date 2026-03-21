@@ -1,0 +1,6 @@
+.DS_Store
+
+# Terraform
+infrastructure/environments/*/.terraform
+infrastructure/environments/*/terraform.tfstate*
+infrastructure/environments/*/.terraform.lock.hcl
