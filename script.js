@@ -5,7 +5,7 @@ const IMAGE_LIST = {
     'images/vertical/3840x2160 - 1.png',
     'images/vertical/3840x2160 - 2.png',
     'images/vertical/3840x2160 - 3.png',
-    'images/vertical/3840x2160 - 5.png',
+    'images/vertical/3840x2160 - 4.png',
   ],
   horizontal: [
     'images/horizontal/3840x2160 - 1.png',
