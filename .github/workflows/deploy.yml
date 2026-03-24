@@ -20,7 +20,7 @@ env:
   DEPLOY_SECRET_PREFIX: /neumafit/signage-slider
 
 concurrency:
-  group: deploy-s3-main
+  group: deploy-web-${{ github.event.inputs.environment || github.ref_name }}
   cancel-in-progress: true
 
 jobs:
