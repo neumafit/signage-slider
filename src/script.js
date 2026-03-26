@@ -1,19 +1,39 @@
-// 이미지 목록 설정
-// 각 모드별 이미지 파일명을 아래 배열에 추가하세요.
-const IMAGE_LIST = {
+// 전체 이미지 목록 (모든 이미지 포함)
+const ALL_IMAGES = {
   vertical: [
-    // 'images/vertical/3840x2160 - 1.png',
-    // 'images/vertical/3840x2160 - 2.png',
+    'images/vertical/3840x2160 - 1.png',
+    'images/vertical/3840x2160 - 2.png',
     'images/vertical/3840x2160 - 3.png',
     'images/vertical/3840x2160 - 4.png',
   ],
   horizontal: [
-    // 'images/horizontal/3840x2160 - 1.png',
-    // 'images/horizontal/3840x2160 - 2.png',
+    'images/horizontal/3840x2160 - 1.png',
+    'images/horizontal/3840x2160 - 2.png',
     'images/horizontal/3840x2160 - 3.png',
     'images/horizontal/3840x2160 - 4.png',
   ],
 };
+
+// localStorage에서 비활성화된 이미지 목록 불러오기
+function getDisabledImages() {
+  try {
+    return JSON.parse(localStorage.getItem('disabledImages')) || [];
+  } catch (e) {
+    return [];
+  }
+}
+
+function setDisabledImages(list) {
+  localStorage.setItem('disabledImages', JSON.stringify(list));
+}
+
+// 활성화된 이미지만 반환
+function getActiveImages(mode) {
+  var disabled = getDisabledImages();
+  return ALL_IMAGES[mode].filter(function (src) {
+    return disabled.indexOf(src) === -1;
+  });
+}
 
 const SLIDE_INTERVAL = 20000; // 20초
 
@@ -21,7 +41,7 @@ let currentIndex = 0;
 let timer = null;
 
 function startSlider(mode) {
-  const images = IMAGE_LIST[mode];
+  var images = getActiveImages(mode);
   if (images.length === 0) {
     alert('이미지가 없습니다. images/' + mode + '/ 폴더에 이미지를 넣어주세요.');
     return;
@@ -76,6 +96,81 @@ function nextSlide(totalImages) {
       track.style.transform = 'translateX(0)';
     }, 1000); // 애니메이션 완료 후
   }
+}
+
+// 오른쪽 모서리 5회 클릭으로 설정 패널 열기
+(function () {
+  var tapCount = 0;
+  var tapTimer = null;
+  var tapArea = document.getElementById('secret-tap-area');
+
+  tapArea.addEventListener('click', function (e) {
+    e.stopPropagation();
+    tapCount++;
+    if (tapTimer) clearTimeout(tapTimer);
+
+    if (tapCount >= 5) {
+      tapCount = 0;
+      openSettings();
+    } else {
+      // 5초 내로 5회 클릭해야 함
+      tapTimer = setTimeout(function () {
+        tapCount = 0;
+      }, 5000);
+    }
+  });
+})();
+
+// 설정 패널 열기
+function openSettings() {
+  var panel = document.getElementById('settings-panel');
+  panel.classList.remove('hidden');
+  renderToggleList('vertical');
+  renderToggleList('horizontal');
+}
+
+// 설정 패널 닫기
+function closeSettings() {
+  document.getElementById('settings-panel').classList.add('hidden');
+}
+
+// 토글 목록 렌더링
+function renderToggleList(mode) {
+  var container = document.getElementById('toggle-list-' + mode);
+  var disabled = getDisabledImages();
+  container.innerHTML = '';
+
+  ALL_IMAGES[mode].forEach(function (src) {
+    var isActive = disabled.indexOf(src) === -1;
+    // 파일명만 추출하여 표시
+    var fileName = src.split('/').pop();
+
+    var item = document.createElement('div');
+    item.className = 'toggle-item';
+
+    var label = document.createElement('span');
+    label.className = 'toggle-label';
+    label.textContent = fileName;
+
+    var toggle = document.createElement('button');
+    toggle.className = 'toggle-btn ' + (isActive ? 'active' : 'inactive');
+    toggle.textContent = isActive ? 'ON' : 'OFF';
+    toggle.addEventListener('click', function () {
+      var currentDisabled = getDisabledImages();
+      var idx = currentDisabled.indexOf(src);
+      if (idx === -1) {
+        currentDisabled.push(src);
+      } else {
+        currentDisabled.splice(idx, 1);
+      }
+      setDisabledImages(currentDisabled);
+      renderToggleList(mode);
+    });
+
+    item.appendChild(label);
+    item.appendChild(toggle);
+    container.appendChild(item);
+  });
 }
 
 // 브라우저 뒤로가기로 선택 화면 복귀
