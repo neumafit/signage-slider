@@ -15,12 +15,23 @@ const ALL_IMAGES = {
   ],
 };
 
+// 기본 비활성화 이미지 (localStorage에 값이 없을 때 적용)
+var DEFAULT_DISABLED = [
+  'images/vertical/3840x2160 - 1.png',
+  'images/vertical/3840x2160 - 2.png',
+  'images/horizontal/3840x2160 - 1.png',
+  'images/horizontal/3840x2160 - 2.png',
+  'images/horizontal/3840x2160 - 5.png',
+];
+
 // localStorage에서 비활성화된 이미지 목록 불러오기
 function getDisabledImages() {
   try {
-    return JSON.parse(localStorage.getItem('disabledImages')) || [];
+    var stored = localStorage.getItem('disabledImages');
+    if (stored === null) return DEFAULT_DISABLED.slice();
+    return JSON.parse(stored);
   } catch (e) {
-    return [];
+    return DEFAULT_DISABLED.slice();
   }
 }
 
