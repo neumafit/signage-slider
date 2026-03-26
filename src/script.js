@@ -11,6 +11,7 @@ const ALL_IMAGES = {
     'images/horizontal/3840x2160 - 2.png',
     'images/horizontal/3840x2160 - 3.png',
     'images/horizontal/3840x2160 - 4.png',
+    'images/horizontal/3840x2160 - 5.png',
   ],
 };
 
