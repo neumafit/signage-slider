@@ -14,6 +14,7 @@ const SLIDE_INTERVAL = 20000; // 20초
 
 let currentIndex = 0;
 let timer = null;
+let currentMode = null;
 let knownVersion = null;
 
 // 배포 버전 확인 (슬라이드 한 바퀴마다 호출)
@@ -25,7 +26,10 @@ function checkVersion() {
         // 최초 로드 시 버전 기록
         knownVersion = data.version;
       } else if (data.version !== knownVersion) {
-        // 버전 변경 감지 → 페이지 새로고침
+        // 버전 변경 감지 → 현재 모드를 해시에 저장 후 새로고침
+        if (currentMode) {
+          location.hash = currentMode;
+        }
         location.reload();
       }
     })
@@ -35,7 +39,16 @@ function checkVersion() {
 // 페이지 로드 시 현재 버전 기록
 checkVersion();
 
+// 해시에 모드가 있으면 자동 시작 (버전 갱신 후 복귀)
+(function () {
+  var hash = location.hash.replace('#', '');
+  if (hash === 'vertical' || hash === 'horizontal') {
+    startSlider(hash);
+  }
+})();
+
 function startSlider(mode) {
+  currentMode = mode;
   var images = IMAGE_LIST[mode];
   if (images.length === 0) {
     alert('이미지가 없습니다. images/' + mode + '/ 폴더에 이미지를 넣어주세요.');
