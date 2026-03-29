@@ -18,9 +18,29 @@ const SLIDE_INTERVAL = 20000; // 20초
 
 let currentIndex = 0;
 let timer = null;
+let knownVersion = null;
+
+// 배포 버전 확인 (슬라이드 한 바퀴마다 호출)
+function checkVersion() {
+  fetch('version.json?t=' + Date.now())
+    .then(function (res) { return res.json(); })
+    .then(function (data) {
+      if (knownVersion === null) {
+        // 최초 로드 시 버전 기록
+        knownVersion = data.version;
+      } else if (data.version !== knownVersion) {
+        // 버전 변경 감지 → 페이지 새로고침
+        location.reload();
+      }
+    })
+    .catch(function () {});
+}
+
+// 페이지 로드 시 현재 버전 기록
+checkVersion();
 
 function startSlider(mode) {
-  const images = IMAGE_LIST[mode];
+  var images = IMAGE_LIST[mode];
   if (images.length === 0) {
     alert('이미지가 없습니다. images/' + mode + '/ 폴더에 이미지를 넣어주세요.');
     return;
@@ -34,18 +54,17 @@ function startSlider(mode) {
   document.getElementById('slider-screen').classList.remove('hidden');
 
   // 슬라이더 트랙에 이미지 삽입 (무한 루프를 위해 첫 이미지를 끝에 복제)
-  const track = document.getElementById('slider-track');
+  var track = document.getElementById('slider-track');
   track.innerHTML = '';
 
   images.forEach(function (src) {
-    const img = document.createElement('img');
+    var img = document.createElement('img');
     img.src = src;
     img.alt = '';
     track.appendChild(img);
   });
 
-  // 무한 루프용: 첫 번째 이미지를 끝에 복제
-  const cloneImg = document.createElement('img');
+  var cloneImg = document.createElement('img');
   cloneImg.src = images[0];
   cloneImg.alt = '';
   track.appendChild(cloneImg);
@@ -60,7 +79,7 @@ function startSlider(mode) {
 }
 
 function nextSlide(totalImages) {
-  const track = document.getElementById('slider-track');
+  var track = document.getElementById('slider-track');
   currentIndex++;
 
   // 슬라이드 애니메이션
@@ -73,7 +92,10 @@ function nextSlide(totalImages) {
       track.style.transition = 'none';
       currentIndex = 0;
       track.style.transform = 'translateX(0)';
-    }, 1000); // 애니메이션 완료 후
+    }, 1000);
+
+    // 한 바퀴 돌았을 때 배포 버전 확인
+    checkVersion();
   }
 }
 

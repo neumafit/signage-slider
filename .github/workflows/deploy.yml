@@ -60,6 +60,10 @@ jobs:
           echo "s3_bucket=$(echo "$CONFIG" | jq -r '.S3_BUCKET')" >> "$GITHUB_OUTPUT"
           echo "cloudfront_distribution_id=$(echo "$CONFIG" | jq -r '.CLOUDFRONT_DISTRIBUTION_ID')" >> "$GITHUB_OUTPUT"
 
+      - name: Generate version file
+        run: |
+          echo "{\"version\":\"${{ github.sha }}\"}" > src/version.json
+
       - name: Upload to S3 (sync)
         run: |
           aws s3 sync src/ "s3://${{ steps.config.outputs.s3_bucket }}/" \
