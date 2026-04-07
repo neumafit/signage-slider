@@ -11,6 +11,7 @@ const IMAGE_LIST = {
     'images/horizontal/3840x2160 - 1.png',
     'images/horizontal/3840x2160 - 2.png',
     'images/horizontal/3840x2160-3-neumafit.png',
+    'images/horizontal/3840x2160-4-jambaekee.png',
     'images/horizontal/3840x2160-5-jeleve.png',
   ],
 };
