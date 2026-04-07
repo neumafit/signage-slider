@@ -3,14 +3,15 @@ const IMAGE_LIST = {
   vertical: [
     'images/vertical/3840x2160 - 1.png',
     'images/vertical/3840x2160 - 2.png',
-    'images/vertical/3840x2160 - 3.png',
-    'images/vertical/3840x2160 - 4.png',
+    'images/vertical/3840x2160-3-neumafit.png',
+    'images/vertical/3840x2160-4-jambaekee.png',
+    'images/vertical/3840x2160-5-jeleve.png',
   ],
   horizontal: [
     'images/horizontal/3840x2160 - 1.png',
     'images/horizontal/3840x2160 - 2.png',
-    'images/horizontal/3840x2160 - 3.png',
-    'images/horizontal/3840x2160 - 4.png',
+    'images/horizontal/3840x2160-3-neumafit.png',
+    'images/horizontal/3840x2160-5-jeleve.png',
   ],
 };
 
