@@ -50,3 +50,13 @@ infrastructure/         # Terraform (S3 + CloudFront)
 - 한국어 주석 사용
 - 파일명은 영문 소문자, 케밥 케이스
 - `index.html`의 CSS/JS 참조에 `?v=N` 캐시 버스팅 포함 — 코드 변경 시 번호를 올릴 것
+
+<!-- doc-sync plugin: do not edit manually -->
+- 코드 작성 시 어쩔 수 없는 트레이드오프는 docs/quirks.md에 기록
+- 작업 완료 후 /doc-sync 업데이트 여부 판단
+- 문서에 없는 정보를 발견하면 코드를 직접 읽고 추론 후 즉시 문서에 기록
+- 문서를 맹신하지 말 것. human verified 날짜를 보고 신뢰도를 스스로 판단
+- 섹션이 비어있으면 코드에서 추론하되, 불확실하면 작업 완료 후 개발자에게 확인 요청
+- 외부 파일 참조는 상대 경로로만 작성 (브랜치 머지 안전)
+- 모듈 추가·제거 시 해당 module.md와 REPO_CONTEXT.md의 Project Structure 표를 함께 갱신
+<!-- /doc-sync plugin -->
