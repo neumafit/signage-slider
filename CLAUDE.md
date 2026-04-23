@@ -21,15 +21,20 @@ infrastructure/         # Terraform (S3 + CloudFront)
 .github/workflows/      # GitHub Actions 배포
 ```
 
-## 배포
-- **태그 푸시**: `git tag -f prd/web && git push origin prd/web -f` → GitHub Actions 트리거
+## 배포 방법
+- 커밋 → 푸시 → 태그 푸시로 배포 트리거
+  ```bash
+  git push origin main && git tag -f prd/web && git push origin prd/web -f
+  ```
 - **수동 트리거**: `gh workflow run deploy.yml -f environment=prd`
-- 배포 시 `version.json`이 커밋 해시로 자동 생성됨
+- 태그 형식: `{환경}/web` (prd, stg, dev)
+- 배포 파이프라인: GitHub Actions → S3 sync → CloudFront 캐시 무효화
 
 ## 자동 갱신 (version.json)
-- 배포마다 GitHub Actions가 `version.json`에 커밋 해시를 기록
+- 배포마다 GitHub Actions가 커밋 해시로 `version.json`을 자동 생성 (별도 작업 불필요)
 - 사이니지의 슬라이더는 슬라이드 한 바퀴(~80초)마다 `version.json`을 fetch
-- 버전이 바뀌면 `location.reload()`로 자동 새로고침
+- 버전이 바뀌면 현재 모드(vertical/horizontal)를 URL 해시에 저장 후 `location.reload()`
+- 페이지 reload 시 해시를 읽어 자동으로 해당 모드 슬라이더 재시작 (선택 화면으로 돌아가지 않음)
 - 따라서 이미지 교체, 코드 변경 등 어떤 배포든 사이니지 조작 없이 자동 반영됨
 
 ## 이미지 변경 방법
