@@ -4,3 +4,6 @@
 infrastructure/environments/*/.terraform
 infrastructure/environments/*/terraform.tfstate*
 infrastructure/environments/*/.terraform.lock.hcl
+
+# 로컬 이미지 백업
+oldAssets/
